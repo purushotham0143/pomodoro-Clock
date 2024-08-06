@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .main {
+            border: 2px solid #333;
+            border-radius: 10px;
+            width: 400px;
+            height: 400px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .promo {
+            border: 2px solid #333;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            margin-top: 20px;
+            background-color: #e0e0e0;
+        }
+        h4 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h3 {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="promo" id="promo">0:00</div>
+        <h4 id="time">0</h4>
+        <button id="plus">+</button>
+        <button id="get">Start</button>
+        <button id="pasue">Pasue</button>
+        <h3 id="message">Session Time</h3>
+    </div>
+    <script>
+        let count = 0;
+        let b = 0;
+        let s = 0;
+        let id;
+        let isSession = true;
+
+        document.getElementById('plus').addEventListener('click', () => {
+            count++;
+            document.getElementById('time').innerText = `${count}`;
+        });
+
+        document.getElementById('get').addEventListener('click', () => {
+            if(count>0){
+            let time = count * 60;
+            startTimer(time);
+            }
+        });
+
+        function startTimer(seconds) {
+            clearInterval(id);
+            let sessionTime = 60;
+            let breakTime = 60;
+
+            id = setInterval(() => {
+                if (seconds <= 0) {
+                    if (isSession) {
+                        b++;
+                        seconds = breakTime;
+                        isSession = false;
+                        document.getElementById('message').innerText = "Break Time " + `${b}`;
+                    } else {
+                        s++;
+                        seconds = sessionTime;
+                        isSession = true;
+                        document.getElementById('message').innerText = "Session Time " + `${s}`;
+                    }
+                }
+                let mins = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+
+                document.getElementById('promo').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                seconds--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
